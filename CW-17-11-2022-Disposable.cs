@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -27,10 +27,11 @@ namespace ClassWork
 
         private void CreateFile()
         {
-            FileStream newFile = new FileStream(path, FileMode.Create);
-            StreamWriter sw = new StreamWriter(newFile);
-            sw.Write(str);
-            sw.Close();
+            using (FileStream newFile = new FileStream(path, FileMode.Create))
+            using (StreamWriter sw = new StreamWriter(newFile))
+            {
+                sw.Write(str);
+            }
         }
 
         private void Count()
@@ -38,9 +39,10 @@ namespace ClassWork
             try
             {
                 fs = new FileStream(path, FileMode.Open);
-                StreamReader sr = new StreamReader(fs);
-                string str = sr.ReadToEnd();
-
+                using (StreamReader sr = new StreamReader(fs))
+                {
+                    string str = sr.ReadToEnd();
+                }
                 List<string> words = str.Split(new char[] { ' ', '.', ',' },
                     StringSplitOptions.RemoveEmptyEntries).ToList<string>();
 
@@ -49,7 +51,7 @@ namespace ClassWork
                     string key = word.ToLowerInvariant();
 
                     if (result.ContainsKey(key))
-                        result[key] = ++result[key];
+                        result[key]++;
                     else
                         result.Add(key, 1);
                 }
