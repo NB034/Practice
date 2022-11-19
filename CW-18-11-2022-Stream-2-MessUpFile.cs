@@ -54,7 +54,7 @@ namespace ClassWork
         private void MessUp()
         {
             code = code.Replace("public", "private");
-            ChangeRegister();
+            ChangeRegisterAlternative();
             RemoveSpacesAndTabs();
             ReverseLines();
         }
@@ -76,11 +76,27 @@ namespace ClassWork
             }
         }
 
+        private void ChangeRegisterAlternative()
+        {
+            List<char> list = new List<char>(code);
+            for (int i = 0; i < code.Length; i++)
+            {
+                if (Char.IsLetter(code[i]))
+                {
+                    int j = list.FindIndex(i + 1, (char ch) => !Char.IsLetter(ch));
+                    if (j != -1 && j - i > 2)
+                    {
+                        code = code.Replace(code.Substring(i, j - i), code.Substring(i, j - i).ToUpper());
+                        i = j;
+                    }
+                }
+            }
+        }
+
         private void RemoveSpacesAndTabs()
         {
             StringBuilder sb = new StringBuilder();
             bool isRow = false;
-            char previous = '\n';
             for (int i = 0; i < code.Length; i++)
             {
                 if (code[i] == ' ' || code[i] == '\t')
@@ -93,7 +109,6 @@ namespace ClassWork
                     continue;
                 }
                 isRow = false;
-                previous = code[i];
                 sb.Append(code[i]);
             }
             code = sb.ToString();

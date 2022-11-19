@@ -9,8 +9,8 @@ namespace ClassWork
 {
     internal class StreamPractice
     {
-        Random rand = new Random();
-        int numbers = 5;
+        int numbersCount = 5;
+        string fileName = "binary.txt";
 
         public StreamPractice()
         {
@@ -20,32 +20,33 @@ namespace ClassWork
 
         private void WriteToBinary()
         {
-            using (FileStream fs = new FileStream("binary.txt", FileMode.Create))
+            using (FileStream fs = new FileStream(fileName, FileMode.Create))
             using (BinaryWriter bw = new BinaryWriter(fs, Encoding.UTF8))
             {
-                Ints(bw);
+                WriteNumbersToFile(bw);
                 bw.Write("Hello ");
-                Ints(bw);
-                bw.Write("world!\n");
+                WriteNumbersToFile(bw);
+                bw.Write("world!" + Environment.NewLine);
             }
         }
 
         private void ReadFromBinary()
         {
-            using (FileStream fs = new FileStream("binary.txt", FileMode.Open))
-            using (BinaryReader bw = new BinaryReader(fs, Encoding.UTF8))
+            using (FileStream fs = new FileStream(fileName, FileMode.Open))
+            using (BinaryReader br = new BinaryReader(fs, Encoding.UTF8))
             {
-                while (fs.Position != fs.Length)
+                while (fs.Position < fs.Length)
                 {
-                    fs.Seek(sizeof(Int32) * numbers, SeekOrigin.Current);
-                    Console.Write(bw.ReadString());
+                    fs.Seek(sizeof(Int32) * numbersCount, SeekOrigin.Current);
+                    Console.Write(br.ReadString());
                 }
             }
         }
 
-        private void Ints(BinaryWriter bw)
+        private void WriteNumbersToFile(BinaryWriter bw)
         {
-            for (int i = 0; i < numbers; i++)
+            Random rand = new Random();
+            for (int i = 0; i < numbersCount; i++)
             {
                 bw.Write(rand.Next(0, 10));
             }
