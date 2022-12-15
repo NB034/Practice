@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ClassWork.PatternPractice.Prototype
 {
-    internal class Object3D : ICloneable
+    internal class Object3D : IObject3D, ICloneable
     {
         public string Name { get; set; }
         public Location ObjectLocation { get; set; }
@@ -20,6 +20,11 @@ namespace ClassWork.PatternPractice.Prototype
         public object Clone()
         {
             return (object)new Object3D(Name, ObjectLocation.X, ObjectLocation.Y, ObjectLocation.Z);
+        }
+
+        public void PrepareForRender()
+        {
+            // Logic
         }
     }
 }
